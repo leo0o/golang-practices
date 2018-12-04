@@ -6,16 +6,16 @@ import (
 
 type call struct {
 	value interface{}
-	err error
-	wg sync.WaitGroup
+	err   error
+	wg    sync.WaitGroup
 }
 
 type Group struct {
-	lock sync.Mutex
+	lock  sync.Mutex
 	calls map[string]*call
 }
 
-func (g *Group)Do(key string, fn func()(val interface{}, err error)) (interface{}, error){
+func (g *Group) Do(key string, fn func() (val interface{}, err error)) (interface{}, error) {
 	g.lock.Lock()
 	if g.calls == nil {
 		g.calls = make(map[string]*call)
@@ -38,4 +38,3 @@ func (g *Group)Do(key string, fn func()(val interface{}, err error)) (interface{
 	g.lock.Unlock()
 	return c.value, c.err
 }
-

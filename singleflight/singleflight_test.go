@@ -1,12 +1,12 @@
 package singleflight
 
 import (
-	"testing"
-	"fmt"
 	"errors"
+	"fmt"
 	"go.uber.org/atomic"
-	"time"
 	"sync"
+	"testing"
+	"time"
 )
 
 func TestGroup_Do(t *testing.T) {
@@ -25,7 +25,7 @@ func TestGroup_Do(t *testing.T) {
 func TestGroup_Do2(t *testing.T) {
 	var someErr = errors.New("some error")
 	var g Group
-	v,  err := g.Do("key", func() (val interface{}, err error) {
+	v, err := g.Do("key", func() (val interface{}, err error) {
 		return nil, someErr
 	})
 	if err != someErr {
@@ -41,14 +41,14 @@ func TestGroup_Do3(t *testing.T) {
 	var times atomic.Int32
 
 	ch := make(chan string)
-	fn := func() (interface{}, error){
+	fn := func() (interface{}, error) {
 		times.Add(1)
-		time.Sleep(2*time.Second)
+		time.Sleep(2 * time.Second)
 		return <-ch, nil
 	}
 
 	var wg sync.WaitGroup
-	for i:=0; i<10 ; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go func() {
 			v, e := g.Do("key", fn)
@@ -61,7 +61,7 @@ func TestGroup_Do3(t *testing.T) {
 			wg.Done()
 		}()
 	}
-	time.Sleep(1*time.Second)
+	time.Sleep(1 * time.Second)
 	ch <- "done"
 	wg.Wait()
 	if got := times.Load(); got != 1 {
