@@ -1,4 +1,4 @@
-package CloseChannel
+package closechannel
 
 import (
 	"fmt"
